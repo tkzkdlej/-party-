@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-/mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.human.springboot.RMDAO">
+	<select id="getRoom" resultType="com.human.springboot.RMDTO">
+		select room_num, room_name, howmany, room_price, room_image from room order by room_num asc 
+	</select>
+	
+	<select id="RdescProd" resultType="com.human.springboot.RMDTO">
+		select room_num, room_name, howmany, room_price, room_image from room order by room_price desc 
+	</select>
+	<select id="RascProd" resultType="com.human.springboot.RMDTO">
+		select room_num, room_name, howmany, room_price, room_image from room order by room_price asc 
+	</select>
+	
+	<select id="getRmDetail" resultType="com.human.springboot.RMDTO">
+		select room_num, room_name, howmany, room_price, 
+			   room_content, room_image from room where room_name=#{param1} order by room_num asc
+	</select>
+	
+	<insert id="addRmCart">
+		insert into room_cart (rc_num, id, room_num, stay_date, rt_howmany) 
+					values(rc_num.nextval,#{param1},#{param2},#{param3},#{param4})
+	</insert>
+	
+	<insert id="addRmToCart">
+		INSERT INTO total_cart (TCART_NUM, cart_num, TC_ID)
+VALUES (TCART_NUM.NEXTVAL, (SELECT RC_NUM FROM room_cart WHERE id=#{param1} and room_num=#{param2} and stay_date=#{param3}), #{param1})
+	</insert>
+	
+	<insert id="nomalRmAddToCart">
+		INSERT INTO total_cart (TCART_NUM, cart_num, TC_ID)
+VALUES (#{param4}, (SELECT RC_NUM FROM room_cart WHERE id=#{param1} and room_num=#{param2} and stay_date=#{param3}), #{param1})
+	</insert>
+	
+	<select id="checkNum" resultType="com.human.springboot.RMDTO">
+		select stay_date from room_cart where room_num=#{param1}
+	</select>
+	
+	
+	
+	<!-- 	룸 리뷰관련 -->
+
+	<insert id="revInsert">
+		INSERT INTO review (review_num, r_writer, room_num, rcontent, r_create_date)
+		values(review_num.nextval, #{param1}, #{param2}, #{param3}, sysdate)
+		
+
+	</insert>
+	<select id="selectR" resultType="com.human.springboot.RMDTO">
+		select REVIEW_NUM, R_WRITER, RCONTENT, R_CREATE_DATE  from review
+		 where room_num=#{param1} order by R_CREATE_DATE desc
+	</select>
+	
+<!-- 		용품 리뷰관련  -->
+
+	<insert id="revpInsert">
+		INSERT INTO review (review_num, r_writer, prod_num, rcontent, r_create_date)
+		values(review_num.nextval, #{param1}, #{param2}, #{param3}, sysdate)
+		</insert>
+
+
+	<select id="selectpR" resultType="com.human.springboot.RMDTO">
+		select REVIEW_NUM, R_WRITER, RCONTENT, R_CREATE_DATE  from review
+		 where prod_num=#{param1} order by R_CREATE_DATE desc
+	</select>
+	
+</mapper>

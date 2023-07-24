@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-/mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.human.springboot.AMDAO">
+	<select id="mList" resultType="com.human.springboot.AMDTO">
+		select id, pwd, name, email, address, zip_code, mobile, birth, regdate
+			from member
+			order by name
+	</select>
+
+	<delete id="memberDel" parameterType="String">
+		delete from member where id = #{param1}
+	</delete>
+	<delete id="MocDel" >
+	DELETE FROM ordered_cart WHERE o_tc_id = #{param1}
+	</delete>
+	<delete id="MpcDel" >
+	DELETE FROM prod_cart WHERE id = #{param1}
+	</delete>
+	<delete id="MrcDel" >
+	DELETE FROM room_cart WHERE id = #{param1}
+	</delete>
+	<delete id="MQdelete">
+	 delete from Board where b_writer=#{param1}
+	</delete>
+	<delete id="Mbcdel1" >
+		delete from board_comment 
+		where board_num
+		IN (
+  		SELECT board_num 
+		FROM board
+	  	WHERE b_writer = #{param1}
+	    AND board_num = board_num
+		)
+	</delete>
+	<delete id="Mbcdel" >
+		delete from board_comment where bc_writer=#{param1}
+	</delete>
+	<delete id="MtDel" >
+		delete from total_cart where tc_id=#{param1}
+	</delete>
+	<delete id="MrDel" parameterType="String">
+		delete from review where r_writer = #{param1}
+	</delete>
+</mapper>

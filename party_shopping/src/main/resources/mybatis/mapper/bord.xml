@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-/mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.human.springboot.QADAO">
+	<select id="blist" resultType="com.human.springboot.QADTO">
+		select board_num, Btitle, B_writer, B_Create_date, B_rcount
+			from Board
+			order by board_num DESC
+	</select>
+	<insert id="bInsert" >
+		insert into Board values (board_num.nextval, #{param1}, #{param2}, #{param3},sysdate, 
+								 sysdate, 0) 
+	</insert>
+	<select id="QviewList" resultType="com.human.springboot.QADTO">
+		select board_num, Btitle, Bcontent, B_writer, B_Create_date, B_Update_date, B_rcount
+			from Board
+			where board_num=#{param1}
+	</select>
+	<update id="updateView">
+		update Board set Btitle=#{param1}, Bcontent=#{param2}, B_Update_date=sysdate
+		where board_num=#{param3}
+	</update>
+
+	<delete id="Qdelete">
+	 delete from Board where board_num=#{param1}
+	</delete>
+	<update id="Qread">
+		update Board set B_rcount = B_rcount+1 where board_num=#{param1}
+	</update>
+	<insert id="bcInsert" >
+		insert into board_comment values (BCOMENT_NUM.nextval, #{param2}, #{param3},sysdate, 
+								 sysdate, #{param1}) 
+	</insert>
+	
+	<delete id="bcdel" >
+		delete from board_comment where BCOMENT_NUM=#{param1}
+	</delete>
+	
+	<delete id="bcdel2" >
+		delete from board_comment where board_num=#{param1}
+	</delete>
+	<select resultType="com.human.springboot.BCDTO" id="comment">
+	select bc_writer,bc_create_date,bc_content,bcoment_num from board_comment where board_num=#{param1}order by bc_create_date 
+	</select>
+		
+</mapper>

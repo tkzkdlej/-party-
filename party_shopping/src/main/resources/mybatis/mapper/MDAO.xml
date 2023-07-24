@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.human.springboot.MDAO">
+
+<!-- 	 회원정보수정관련 -->
+	<select id="selectMy" resultType="com.human.springboot.MDTO">
+	 	select id,pwd,name,email,zip_code,mobile,birth from member
+	 	where id=#{param1}
+	 	
+	</select>
+	
+	<select id="showAdr" resultType="com.human.springboot.MDTO">
+	 	select address from  member
+	 	where id=#{param1}
+	 	
+	</select>
+	
+	<select id="showMob" resultType="com.human.springboot.MDTO">
+	 	select mobile from  member
+	 	where id=#{param1}
+	 	
+	</select>
+	
+	<select id="showBir" resultType="com.human.springboot.MDTO">
+	 	select birth from  member
+	 	where id=#{param1}
+	 	
+	</select>
+	
+	<update id="updateMy">
+		UPDATE member SET id = #{param1} , pwd=#{param3}, 
+					  	  name=#{param4}, email=#{param5}, zip_code=#{param6}, 
+					  	  address=#{param7}, mobile=#{param8}, birth=#{param9}
+					WHERE id = #{param2} 
+	</update>
+<!-- 	 회원정보수정관련 -->
+
+
+
+
+
+<!-- 	 나의 게시글 관련	 -->
+	<select id="selectPlist" resultType="com.human.springboot.POSTDTO">
+	 	select board_num, btitle, b_writer, b_create_date, b_rcount from board
+	 	where b_writer=#{param1} order by board_num asc
+	 	
+	</select>
+	<select id="selectBordNum" resultType="com.human.springboot.POSTDTO">
+	 	select board_num from Board_comment where bcoment_num=#{param1}
+	 	
+	</select>
+<!-- 	 나의 게시글 관련 -->
+
+
+
+
+
+<!--  	나의 댓글 관련 -->
+ 	<select id="myComment" resultType="com.human.springboot.POSTDTO">
+		select bc_content,bc_writer,bc_create_date,BCOMENT_NUM from board_comment where bc_writer=#{param1}
+		order by BCOMENT_NUM asc  
+ 	</select>
+<!--  	나의 댓글 관련 -->
+
+
+
+
+
+<!--    나의 주문내역 관련 -->
+<select id="selectDelInfo" resultType="com.human.springboot.DELIDTO">
+
+	 SELECT
+		  TC.O_TC_ID,
+		  TC.ordered_date,
+		  RC.RC_NUM,
+		  ROOM.ROOM_NUM,
+		  ROOM.ROOM_NAME,
+		  ROOM.ROOM_IMAGE,
+		  ROOM.ROOM_PRICE,
+		  ROOM.HOWMANY,
+		  RC.STAY_DATE,
+		  RC.RT_HOWMANY,
+		  PC.PC_NUM,
+		  PRODUCT.PROD_NAME,
+		  PRODUCT.PROD_PRICE,
+		  PRODUCT.PROD_IMAGE,
+		  PRODUCT.PROD_NUM,
+		  PRODUCT.STOCK,
+		  PC.QTY,
+		  OPTIONT.OPTION_NAME,
+		  OPTIONT.OPTION_VAL,
+		  TC.O_cart_num,
+		  TC.O_tcart_num
+		  
+		FROM
+		  ordered_cart TC
+		  LEFT JOIN room_cart RC ON TC.O_CART_NUM = RC.RC_NUM
+		  LEFT JOIN prod_cart PC ON TC.O_CART_NUM = PC.PC_NUM
+		  LEFT JOIN product PRODUCT ON PC.PROD_NUM = PRODUCT.PROD_NUM
+		  LEFT JOIN room ROOM ON RC.ROOM_NUM = ROOM.ROOM_NUM
+		  LEFT JOIN optiont OPTIONT ON PC.OPTION_NUM = OPTIONT.OPTION_NUM
+		WHERE
+		  TC.O_TC_ID =#{param1}
+		  order by TC.ordered_date asc
+    </select>
+
+<!--    나의 주문내역 관련 -->
+
+</mapper>
+

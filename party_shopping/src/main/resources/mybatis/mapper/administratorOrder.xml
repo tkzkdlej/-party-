@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-/mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.human.springboot.ODAO">
+
+<!-- 주문상세내역보기 -->
+	<select id="orderView" resultType="com.human.springboot.ODTO">
+		      SELECT
+		  ORDERlist.ORDER_NUM,
+		  ORDERlist.ID,
+		  ORDERlist.ORDER_DATE,
+		  ROOM.ROOM_NAME,
+		  RC.STAY_DATE,
+		  RC.RT_HOWMANY,
+		  PRODUCT.PROD_NAME,
+		  PC.QTY,
+		  product.prod_PRICE,
+           ROOM.ROOM_price,
+		  ORDERlist.PAY_WAY
+		FROM
+		  ordered_cart OC
+		  JOIN orderlist ON OC.o_tc_ID = ORDERlist.ID AND OC.o_tcart_num = ORDERlist.TCART_NUM
+		  LEFT JOIN room_cart RC ON OC.o_CART_NUM = RC.RC_NUM
+		  LEFT JOIN prod_cart PC ON OC.o_CART_NUM = PC.PC_NUM
+		  LEFT JOIN product PRODUCT ON PC.PROD_NUM = PRODUCT.PROD_NUM
+		  LEFT JOIN room ROOM ON RC.ROOM_NUM = ROOM.ROOM_NUM
+		  LEFT JOIN optiont OPTIONT ON PC.OPTION_NUM = OPTIONT.OPTION_NUM
+          	  where TCART_NUM=#{param1}
+	</select>
+	
+<!-- 	총주문내역보기 -->
+	<select id="oList" resultType="com.human.springboot.ODTO">
+	select * from orderlist
+	</select>
+	
+	<delete id="orderlistDel" >
+	DELETE FROM orderlist WHERE tcart_num = #{param1}
+	</delete>
+	
+	<delete id="ocDel" >
+	DELETE FROM ordered_cart WHERE o_tcart_num = #{param1}
+	</delete>
+	
+	<delete id="pcDel" >
+		DELETE FROM prod_cart
+		WHERE pc_num IN (
+  		SELECT pc_num 
+		FROM ordered_cart 
+	  	WHERE o_tcart_num = #{param1}
+	    AND o_cart_num = pc_num
+		)
+	</delete>
+	
+	<delete id="rcDel" >
+		DELETE FROM room_cart
+		WHERE rc_num IN (
+		  SELECT rc_num 
+		  FROM ordered_cart
+		  WHERE o_tcart_num =#{parmam1}
+		  AND o_cart_num = rc_num
+		)
+	</delete>
+	
+<!-- 	배송상태 -->
+		<update id="delivery">
+		 update orderlist
+		     set delivery = #{param1}
+		 where order_num = #{param2}
+		 
+		</update>
+</mapper>

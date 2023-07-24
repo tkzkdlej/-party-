@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-/mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.human.springboot.PDAO">
+	<insert id="newProduct">
+		insert into product (prod_num, prod_name,prod_price,stock,prod_content,prod_image)
+		values (prod_num.nextval, #{param1}, #{param2}, #{param3},
+		'0','0')
+	</insert>
+	<update id="newUrl">
+		update product set prod_image=#{param1} where prod_name=#{param2}
+	</update>
+	<update id="newUrlC">
+		update product set prod_content=#{param1} where prod_name=#{param2}
+	</update>
+	<select id="pList" resultType="com.human.springboot.PDTO">
+		select prod_num, prod_name, prod_image, prod_price, stock
+			from product
+			order by prod_num
+	</select>
+	<select id="viewPro" resultType="com.human.springboot.PDTO">
+		select prod_num, prod_name,  prod_price, prod_image, prod_content, stock
+			from product
+			where prod_num=#{param1}
+	</select>
+	<delete id="proDelete">
+		delete from product where prod_num=#{param1}
+	</delete>
+	<update id="updatePro">
+		update product set prod_name=#{param2}, prod_price=#{param3}, stock=#{param4}
+		where prod_num=#{param1}
+	</update>
+	<update id="updateUrl">
+		update product set prod_image=#{param1} where prod_num=#{param2}
+	</update>
+	<update id="updateUrlC">
+		update product set prod_content=#{param1} where prod_num=#{param2}
+	</update>
+</mapper>

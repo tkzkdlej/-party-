@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-/mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	<mapper namespace="com.human.springboot.PDAO"><!-- dto칼럼이 적은건 오류안남 반대는 오류 -->
+	<select id="getProd" resultType="com.human.springboot.PDTO">
+		select prod_num, prod_name, prod_price, prod_image from product order by prod_num asc
+	</select>
+	<select id="descProd" resultType="com.human.springboot.PDTO">
+		select prod_num, prod_name, prod_price, prod_image from product order by prod_price desc
+	</select>
+	<select id="ascProd" resultType="com.human.springboot.PDTO">
+		select prod_num, prod_name, prod_price, prod_image from product order by prod_price asc
+	</select>
+	<select id="getDetail" resultType="com.human.springboot.PDTO">
+		select prod_num, prod_name, prod_price, stock, prod_image, prod_content from product where prod_name=#{param1} order by prod_num asc
+	</select>
+	
+<!-- 	<select id="getOption" resultType="com.human.springboot.PDTO"> -->
+<!-- 		select  -->
+<!-- 	</select> -->
+	
+	<insert id="addCart">
+		insert into prod_cart (pc_num, id, prod_num, qty) 
+					values(rc_num.nextval,#{param1},#{param2},#{param3})
+	</insert>
+	
+	<insert id="addToCart">
+		INSERT INTO total_cart (TCART_NUM, cart_num, TC_ID)
+VALUES (TCART_NUM.NEXTVAL, (SELECT PC_NUM FROM prod_cart WHERE id=#{param1} and prod_num=#{param2} and order_check IS NULL), #{param1})
+	</insert>
+	
+	<insert id="nomalAddToCart">
+		INSERT INTO total_cart (TCART_NUM, cart_num, TC_ID)
+VALUES (#{param3}, (SELECT PC_NUM FROM prod_cart WHERE id=#{param1} and prod_num=#{param2} and order_check IS NULL), #{param1})
+	</insert>
+	
+	
+	
+	<select id="checkNum" resultType="com.human.springboot.PDTO">
+		select prod_num,order_check from prod_cart where id=#{param1}
+	</select>
+	
+	<update id="qtyUp">
+		UPDATE prod_cart SET qty = qty + #{param1} WHERE id = #{param2} AND prod_num = #{param3}
+	</update>
+
+	
+					<!-- 	Review part -->
+					
+	<select id="getProdrev" resultType="com.human.springboot.RDTO">
+		select review_num,order_num,r_writer,prod_num,rtitle,
+			   rcontent,rimage,r_rcount,r_create_date,R_UPDATE_DATE,aster
+			   from review
+	</select>
+	
+<!-- 	<select id="getRoomrev" resultType="com.human.springboot.RDTO"> -->
+<!-- 	    select review_num,order_num,r_writer,room_num,rtitle, -->
+<!-- 			   rcontent,rimage,r_rcount,r_create_date,R_UPDATE_DATE,aster -->
+<!-- 			   from review -->
+	
+<!-- 	</select> -->
+	
+	<insert id="prodrevInsert">
+		insert into review (review_num,order_num,r_writer,prod_num,room_num,rtitle,
+							rcontent,rimage,r_rcount,r_create_date,R_UPDATE_DATE,aster )
+							values
+							(#{param1},#{param2},#{param3},#{param4},null,#{param5},
+							#{param6},#{param7},#{param8},#{param9},#{param10},#{param11})
+	</insert>
+	
+<!-- 	<insert id="roomrevInsert"> -->
+<!-- 	 	insert into review (review_num,order_num,r_writer,prod_num,room_num,rtitle, -->
+<!-- 							rcontent,rimage,r_rcount,r_create_date,R_UPDATE_DATE,aster ) -->
+<!-- 							values -->
+<!-- 							(#{param1},#{param2},#{param3},null,#{param4},#{param5}, -->
+<!-- 							#{param6},#{param7},#{param8},#{param9},#{param10},#{param11}) -->
+<!-- 	</insert> -->
+	
+	<update id="prodrevUpdate">
+	 	update review set order_num=#{param2}, r_writer=#{param3},
+	 					  prod_num=#{param4}, rtitle=#{param5}, rcontent=#{param6},
+	 					  rimage=#{param7}, r_rcount=#{param8}, r_update_date=#{param9},
+	 					  aster=#{param10}
+	 					  where review_num=#{param1}
+		
+	</update>
+	
+<!-- 	<update id="roomrevUpdate"> -->
+<!-- 	 	update review set order_num=#{param2}, r_writer=#{param3}, -->
+<!-- 	 					  room_num=#{param4}, rtitle=#{param5}, rcontent=#{param6}, -->
+<!-- 	 					  rimage=#{param7}, r_rcount=#{param8}, r_update_date=#{param9}, -->
+<!-- 	 					  aster=#{param10} -->
+<!-- 	 					  where review_num=#{param1} -->
+<!-- 	</update> -->
+	
+<!-- 	수정필요, 두개같이 지워질 가능성 -->
+	<delete id="prodrevDelete"> 
+		delete from review where review_num=#{param1}
+	</delete>
+	
+<!-- 	<delete id="roomrevDelete"> -->
+<!-- 		delete from review where review_num=#{param1} -->
+<!-- 	</delete> -->
+	
+	</mapper>

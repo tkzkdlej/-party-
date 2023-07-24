@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-/mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.human.springboot.SDAO">
+
+<select id="selectShip" resultType="com.human.springboot.SDTO">
+	select zip_code, address, mobile, name from member where id=#{param1}
+</select>
+
+<select id="total_Tcart" resultType="com.human.springboot.SDTO">
+	select tcart_num from total_cart where tc_id=#{param1} and cart_num=#{param2}
+</select>
+
+<insert id="addOrder">
+	insert into orderlist values(order_num.nextval,#{param1},sysdate,#{param3},
+								 #{param4},#{param5},#{param6},#{param7},'결제완료',#{param2}) 
+</insert>
+
+<select id="order" resultType="com.human.springboot.SDTO">
+	select tcart_num from orderlist where id=#{param1}
+</select>
+
+
+</mapper>
